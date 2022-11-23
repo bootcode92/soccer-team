@@ -48,4 +48,24 @@ describe('When i call MongodbSoccerTeamRepository ====>', () => {
         const soccerTeamNotFound = mongodbSoccerTeamRepository.getById('Id that doesnt exist')
         await expect(soccerTeamNotFound).rejects.toThrow();
     })
+
+    it('Should get team by name', async () => {
+        const soccerTeam = SoccerTeam.create({
+            coach: "pazoek",
+            foundedAt: new Date(),
+            id: v4(),
+            name: "cedric",
+            president: "ddaze",
+            stadium: "azee"
+        })
+        await mongodbSoccerTeamRepository.save(soccerTeam);
+
+        const foundSoccerTeam = await mongodbSoccerTeamRepository.getByName("cedric")
+        expect(foundSoccerTeam.props.name).toEqual("cedric")
+    })
+
+    it('Should return nothing if team name is not found', async () => {
+        const notFoundSoccerTeam = await mongodbSoccerTeamRepository.getByName("notFound");
+        expect(notFoundSoccerTeam).toBeFalsy();
+    })
 })

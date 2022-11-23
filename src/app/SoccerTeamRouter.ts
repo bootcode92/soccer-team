@@ -11,24 +11,29 @@ const uuidGateway = new UuidGateway();
 const createSoccerTeam = new CreateSoccerTeam(mongodbSoccerTeamRepository, uuidGateway);
 const getSoccerTeamById = new GetSoccerTeamById(mongodbSoccerTeamRepository);
 
-router.post('/', (req, res) => {
-    const body = {
-        name: req.body.name,
-        stadium: req.body.stadium,
-        coach: req.body.coach,
-        president: req.body.president,
-        foundedAt: req.body.foundedAt,
+router.post('/', async (req, res) => {
+    try {
+        const body = {
+            name: req.body.name,
+            stadium: req.body.stadium,
+            coach: req.body.coach,
+            president: req.body.president,
+            foundedAt: req.body.foundedAt,
+        }
+        const soccerTeam = await createSoccerTeam.execute(body);
+        return res.status(201).send(soccerTeam.props);
+    } catch(e) {
+        return res.sendStatus(400);
     }
-    const soccerTeam = createSoccerTeam.execute(body);
-    return res.status(200).send(soccerTeam);
+
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     const soccerTeamId = req.params.id
-    const soccerTeam = getSoccerTeamById.execute({
+    const soccerTeam = await getSoccerTeamById.execute({
         id: soccerTeamId,
     });
-    return res.status(200).send(soccerTeam);
+    return res.status(200).send(soccerTeam.props);
 })
 
 export { router as SoccerTeamRouter }

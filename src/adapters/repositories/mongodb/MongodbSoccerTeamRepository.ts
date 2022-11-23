@@ -39,6 +39,12 @@ export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
     }
 
     async getByName(name: string): Promise<SoccerTeam> {
-      return;
+      const soccerTeam = await soccerTeamModel.findOne({
+        name: name,
+      })
+      if (!soccerTeam) {
+        return null;
+      }
+      return new SoccerTeam(soccerTeam);
     }
 }

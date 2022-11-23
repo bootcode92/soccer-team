@@ -17,8 +17,8 @@ describe('When i call CreateSoccerTeam =====>', () => {
         )
     })
 
-    it('should create soccer team', () => {
-        const result = createSoccerTeam.execute({
+    it('should create soccer team', async () => {
+        const result = await createSoccerTeam.execute({
             coach: 'Christophe Galtier',
             foundedAt: new Date(),
             name: "PSG",

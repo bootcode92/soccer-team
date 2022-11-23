@@ -18,8 +18,8 @@ export class CreateSoccerTeam implements Usecase<CreateSoccerTeamInput, SoccerTe
       private readonly idGateway: IdGateway,
     ) {}
 
-    execute(input: CreateSoccerTeamInput): SoccerTeam {
-      const isSoccerTeamAlreadyExist = this.soccerTeamRepository.getByName(input.name);
+    async execute(input: CreateSoccerTeamInput): Promise<SoccerTeam> {
+      const isSoccerTeamAlreadyExist = await this.soccerTeamRepository.getByName(input.name);
       if (isSoccerTeamAlreadyExist) {
         throw new Error('SOCCER_TEAM_ALREADY_EXIST');
       }
@@ -32,7 +32,7 @@ export class CreateSoccerTeam implements Usecase<CreateSoccerTeamInput, SoccerTe
         stadium: input.stadium,
         id: id,
        });
-       this.soccerTeamRepository.save(soccerTeam);
+       await this.soccerTeamRepository.save(soccerTeam);
        return soccerTeam;
     }
    
