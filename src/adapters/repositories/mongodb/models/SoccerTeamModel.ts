@@ -10,7 +10,7 @@ const soccerTeamSchema = new Schema({
         required: true,
     },
     foundedAt: {
-        type: Date,
+        type: Number,
         required: true,
     },
     stadium: {

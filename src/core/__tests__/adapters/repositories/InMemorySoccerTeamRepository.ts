@@ -26,4 +26,11 @@ export class InMemorySoccerTeamRepository implements SoccerTeamRepository {
         }
         return soccerTeam;
     }
+
+    getAllByFoundationDate(foundationDate: Date): SoccerTeam[] {
+        // foundation date is 25 nov 1985.
+        // Resultat doit être toutes les équipes de foot d'avant le 25 nov 1985.
+        const values = Array.from(this.db.values());
+        return values.filter(elem => elem.props.foundedAt < foundationDate)
+    }
 }

@@ -14,7 +14,7 @@ export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
       return new SoccerTeam({
         id: result.id,
         coach: result.coach,
-        foundedAt: result.foundedAt,
+        foundedAt: new Date(result.foundedAt),
         name: result.name,
         players: result.players,
         president: result.president,
@@ -28,7 +28,7 @@ export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
       }, {
         id: soccerTeam.props.id,
         name: soccerTeam.props.name,
-        foundedAt: soccerTeam.props.foundedAt,
+        foundedAt: +soccerTeam.props.foundedAt,
         stadium: soccerTeam.props.stadium,
         coach: soccerTeam.props.coach,
         president: soccerTeam.props.president,
@@ -45,6 +45,23 @@ export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
       if (!soccerTeam) {
         return null;
       }
-      return new SoccerTeam(soccerTeam);
+      return new SoccerTeam({
+        ...soccerTeam,
+        foundedAt: new Date(soccerTeam.foundedAt),
+      });
+    }
+
+    async getAllByFoundationDate(foundationDate: Date): Promise<SoccerTeam[]> {
+      const results = await soccerTeamModel.find({
+        foundedAt: {
+          $lt: +foundationDate
+        }
+      })
+      return results.map(elem => {
+        return new SoccerTeam({
+          ...elem,
+          foundedAt: new Date(elem.foundedAt),
+        })
+      });
     }
 }
