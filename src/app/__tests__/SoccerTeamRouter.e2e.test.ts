@@ -1,11 +1,12 @@
 import * as express from 'express';
 import mongoose from "mongoose";
-const app = express();
 import * as supertest from 'supertest';
 import { SoccerTeamRouter } from "../SoccerTeamRouter";
 import {SoccerTeamRepository} from "../../core/repositories/SoccerTeamRepository";
 import {MongodbSoccerTeamRepository} from "../../adapters/repositories/mongodb/MongodbSoccerTeamRepository";
 import {SoccerTeam} from "../../core/entities/SoccerTeam";
+
+const app = express();
 
 describe('When i call SoccerTeamRouter API =====>', () => {
     let soccerTeamRepository: SoccerTeamRepository;

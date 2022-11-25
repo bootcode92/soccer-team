@@ -1,13 +1,25 @@
 import {model, Schema} from "mongoose";
+import {Player} from "../../../../core/entities/Player";
 
-const soccerTeamSchema = new Schema({
+
+export type SoccerTeamDocument = {
+    id: string;
+    name?: string;
+    foundedAt: number;
+    stadium: string;
+    coach: string;
+    president: string;
+    players: Player[];
+}
+
+export const soccerTeamSchema = new Schema({
     id: {
         type: String,
         required: true,
     },
     name: {
         type: String,
-        required: true,
+        required: false,
     },
     foundedAt: {
         type: Number,

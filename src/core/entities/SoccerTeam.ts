@@ -32,7 +32,7 @@ export class SoccerTeam {
             id: props.id,
             coach: props.coach,
             foundedAt: props.foundedAt,
-            name: props.name.toLowerCase(),
+            name: props.name,
             president: props.president,
             stadium: props.stadium,
             players: []

@@ -1,9 +1,13 @@
 import { SoccerTeam } from "../../../core/entities/SoccerTeam";
 import { SoccerTeamRepository } from "../../../core/repositories/SoccerTeamRepository";
 import { soccerTeamModel } from "./models/SoccerTeamModel";
-
+import {SoccerTeamMapper} from "./mappers/SoccerTeamMapper";
 
 export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
+
+    private soccerTeamMapper = new SoccerTeamMapper();
+
+
     async getById(id: string): Promise<SoccerTeam> {
       const result = await soccerTeamModel.findOne({
         id: id
@@ -11,44 +15,27 @@ export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
       if (!result) {
         throw new Error('SOCCER_TEAM_NOT_FOUND')
       }
-      return new SoccerTeam({
-        id: result.id,
-        coach: result.coach,
-        foundedAt: new Date(result.foundedAt),
-        name: result.name,
-        players: result.players,
-        president: result.president,
-        stadium: result.stadium,
-      });
+      return this.soccerTeamMapper.toSoccerTeam(result);
     }
 
     async save(soccerTeam: SoccerTeam): Promise<void> {
+      const toSoccerTeamModel = this.soccerTeamMapper.toSoccerTeamDocument(soccerTeam);
       await soccerTeamModel.findOneAndUpdate({
         id: soccerTeam.props.id,
-      }, {
-        id: soccerTeam.props.id,
-        name: soccerTeam.props.name,
-        foundedAt: +soccerTeam.props.foundedAt,
-        stadium: soccerTeam.props.stadium,
-        coach: soccerTeam.props.coach,
-        president: soccerTeam.props.president,
-        players: soccerTeam.props.players,
-      }, {
+      }, toSoccerTeamModel, {
         upsert: true,
+        runValidators: true
       })
     }
 
     async getByName(name: string): Promise<SoccerTeam> {
-      const soccerTeam = await soccerTeamModel.findOne({
+      const soccerTeamDocument = await soccerTeamModel.findOne({
         name: name,
       })
-      if (!soccerTeam) {
+      if (!soccerTeamDocument) {
         return null;
       }
-      return new SoccerTeam({
-        ...soccerTeam,
-        foundedAt: new Date(soccerTeam.foundedAt),
-      });
+      return this.soccerTeamMapper.toSoccerTeam(soccerTeamDocument);
     }
 
     async getAllByFoundationDate(foundationDate: Date): Promise<SoccerTeam[]> {
@@ -58,10 +45,7 @@ export class MongodbSoccerTeamRepository implements SoccerTeamRepository {
         }
       })
       return results.map(elem => {
-        return new SoccerTeam({
-          ...elem,
-          foundedAt: new Date(elem.foundedAt),
-        })
+        return this.soccerTeamMapper.toSoccerTeam(elem);
       });
     }
 }
