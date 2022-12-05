@@ -1,4 +1,5 @@
 import { Player } from "./Player";
+import {SoccerTeamErrors} from "../errors/SoccerTeamErrors";
 
 export type SoccerTeamProperties = {
     id: string;
@@ -26,13 +27,13 @@ export class SoccerTeam {
         id: string;
     }) {
         if (props.name === "OM") {
-            throw new Error('FUCK LOM')
+            throw new SoccerTeamErrors.NotAuthorizedSoccerTeam();
         }
         return new SoccerTeam({
             id: props.id,
             coach: props.coach,
             foundedAt: props.foundedAt,
-            name: props.name,
+            name: props.name.toLowerCase(),
             president: props.president,
             stadium: props.stadium,
             players: []
@@ -42,7 +43,7 @@ export class SoccerTeam {
 
     updateName(name: string) {
         if (name === "OM") {
-            throw new Error('FUCK LOM')
+            throw new SoccerTeamErrors.NotAuthorizedSoccerTeam();
         }
         this.props.name = name;
     }

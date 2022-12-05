@@ -2,6 +2,7 @@ import { SoccerTeam } from "../entities/SoccerTeam";
 import { CreateSoccerTeam } from "../usecases/CreateSoccerTeam"
 import { UuidGateway } from "./adapters/gateways/UuidGateway";
 import { InMemorySoccerTeamRepository } from "./adapters/repositories/InMemorySoccerTeamRepository";
+import {SoccerTeamErrors} from "../errors/SoccerTeamErrors";
 
 const db = new Map<string, SoccerTeam>();
 
@@ -28,15 +29,17 @@ describe('When i call CreateSoccerTeam =====>', () => {
         expect(result.props.name).toEqual('psg');
     })
 
-    it('should throw if soccer team name is OM', () => {
-        const result = () => createSoccerTeam.execute({
+    it('should throw if soccer team name is OM', async () => {
+        const result = createSoccerTeam.execute({
             coach: 'Christophe Galtier',
             foundedAt: new Date(),
             name: "OM",
             president: "Nasser",
             stadium: "Parc des princes"
         })
-        expect(() => result()).toThrow();
+        await expect(result).rejects.toThrow(
+            SoccerTeamErrors.NotAuthorizedSoccerTeam
+        );
     })
 
     it('should throw if soccer team already exist', () => {

@@ -23,9 +23,8 @@ router.post('/', async (req, res) => {
         const soccerTeam = await createSoccerTeam.execute(body);
         return res.status(201).send(soccerTeam.props);
     } catch(e) {
-        return res.sendStatus(400);
+        return res.status(400).send(e.message);
     }
-
 })
 
 router.get('/:id', async (req, res) => {
