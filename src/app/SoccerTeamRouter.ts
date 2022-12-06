@@ -4,12 +4,15 @@ import { MongodbSoccerTeamRepository } from '../adapters/repositories/mongodb/Mo
 import { CreateSoccerTeam } from '../core/usecases/CreateSoccerTeam';
 import { GetSoccerTeamById } from '../core/usecases/GetSoccerTeamById';
 
+
 const router = express.Router();
 
 const mongodbSoccerTeamRepository = new MongodbSoccerTeamRepository();
 const uuidGateway = new UuidGateway();
 const createSoccerTeam = new CreateSoccerTeam(mongodbSoccerTeamRepository, uuidGateway);
 const getSoccerTeamById = new GetSoccerTeamById(mongodbSoccerTeamRepository);
+
+
 
 router.post('/', async (req, res) => {
     try {
