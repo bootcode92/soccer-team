@@ -2,7 +2,7 @@ import * as express from 'express';
 import { SoccerTeamRouter } from './app/SoccerTeamRouter';
 import * as mongoose from 'mongoose';
 const multer  = require('multer');
-const upload = multer({ dest: 'uploads/' })
+const upload = multer()
 const path = require('path');
 const port = 3008;
 
@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/dummy_data', (err) => {
     console.info('mongodb connected');
 })
 
-app.post('/profile', upload.single('avatar'), function (req, res, next) {
+app.post('/profile', upload.single('mazen'), function (req, res, next) {
     console.log(req);
     return res.sendStatus(200);
 })
